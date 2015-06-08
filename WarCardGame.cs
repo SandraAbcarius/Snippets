@@ -88,10 +88,10 @@ namespace CardGame
         private Random randomCardSelector = new Random();
         private int cardIndex;
  
-		public Deck()
-		{
+	public Deck()
+	{
             cardIndex = 0;
- 
+ 	    /*how it was taught... I prefer to use foreach over enum */	
             //for (Suit suit = Suit.Hearts; suit <= Suit.Spades; suit++)
             //{
             //    for (FaceValue faceValue = FaceValue.Two; faceValue <= FaceValue.Ace; faceValue++)
@@ -108,10 +108,9 @@ namespace CardGame
                     theDeck.Add(c);
                 }
             }
-		}
+	}
  
-        //Function returns the concatenation of all the cards in the deck
-        //usefull for debugging: to see if it was properly shuffled
+        //Function returns the concatenation of all the cards left in the deck
         public String Print()
         {
             String s = "";
@@ -326,19 +325,8 @@ namespace CardGame
         }/*PokerGame*/
         static void Main(string[] args)
         {
-            //Card card1;
             Deck aDeck = new Deck();
             aDeck.Shuffle();
-           
- 
-            //card1 = aDeck.DealACard();
- 
-            //Console.WriteLine(card1.GetFaceValue() + " of " + card1.GetSuit());
-            //Console.WriteLine("Shuffled");
-            //Console.WriteLine(aDeck.Print());
-            //Console.ReadKey();
- 
-            
             int player1 = 0;
             int player2 = 0;
             int pot = 2;
