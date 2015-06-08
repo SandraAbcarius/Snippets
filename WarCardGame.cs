@@ -158,9 +158,172 @@ namespace CardGame
         }
  
 	}/*Class Deck*/
-  
+  class Hand
+    {
+        private const int CARDSINHAND = 5;
+        private List<Card> theHand = new List<Card>();
+
+        /*the constructor will deal out next 5 cards to the player -still random even if it does not alternate players */
+
+        public Hand(Deck myDeck)
+        {
+            for (int count = 0; count < CARDSINHAND; count++)
+            {
+                theHand.Add(myDeck.DealACard());
+            }
+        }
+
+        public void SortHand()
+        {
+            /*sort the hand based on FaceValue*/
+            /*Since I am just sorting 5 items at a time a bubble sort is fine*/
+            int newn;
+            int n = CARDSINHAND;
+            Card temp;
+            while (n != 0)
+            {
+                newn = 0; /*if no swaps happen we are sorted */
+                for (int i = 1; i < n; i++)
+                {
+                    if (theHand[i - 1].GetSuit() > theHand[i].GetSuit())
+                    {
+                        /* we swap the order since lower index card is greater */
+                        /*should pass by reference? or is ok since in a list already?*/
+                        /*pretty sure is ok but double check */
+                        temp = theHand[i - 1];
+                        theHand[i - 1]= theHand[i];
+                        theHand[i] = temp;
+                        newn = i;
+                    }
+                }
+                n = newn;
+            }
+        }
+
+        public bool FlushHand()
+        {
+            /*return true if all 5 cards are in same suit, false otherwise */
+            bool flush = true;
+            int count = 1;
+            Suit s = theHand[0].GetSuit();
+            while (flush && count < CARDSINHAND)
+            {
+                if (s != theHand[count].GetSuit())
+                {
+                    flush = false;
+                }
+                count++;
+            }/*while*/
+            return flush;
+        }
+        public bool StraightHand()
+        {
+            bool straight = true;
+            int count = 1;
+            FaceValue f = theHand[0].GetFaceValue();
+            while (straight && count < CARDSINHAND)
+            {
+                if ((f + 1) != theHand[count].GetFaceValue())
+                {
+                    straight = false;
+                }
+                else
+                {
+                    f = theHand[count].GetFaceValue();
+                }
+                count++;
+            }/*while*/
+            return straight;
+
+        }
+
+        public void DisplayHand()
+  		{
+            Console.WriteLine("The hand contains: ");
+  			for (int count=0;count<CARDSINHAND;count++)
+  			{
+  		    	Suit s = theHand[count].GetSuit();
+  		     	FaceValue f = theHand[count].GetFaceValue();
+  		     	Console.WriteLine("{0} of {1}",f,s);
+  		     }
+  		}
+
+    }/*Class Hand*/
     class Program
     {
+    	
+    	static void WarGame()
+        {
+            /* create a deck */
+            Deck aDeck = new Deck();
+            /*shuffle the deck*/
+            aDeck.Shuffle();
+            /*simulate 2 players playing "war" as defined by my assignment*/
+            int player1 = 0;
+            int player2 = 0;
+            int pot = 2;
+            int round = 0;
+            while (!aDeck.EmptyDeck())
+            {
+                round += 1;
+                Console.WriteLine("Round{0}", round);
+
+                Card card1 = aDeck.DealACard();
+                Card card2 = aDeck.DealACard();
+
+                Console.WriteLine("Player One card = {0}", card1.ToString());
+                Console.WriteLine("Player Two card = {0}", card2.ToString());
+                if (card1.Equals(card2))
+                {
+                    /*war*/
+                    Console.WriteLine("It is a draw");
+                    if (aDeck.EmptyDeck())
+                    {
+                        /*this is last card so war can not continue*/
+                        player1 += (pot / 2);
+                        player2 += (pot / 2);
+                    }
+                    else
+                    {
+                        pot += 2;
+                    }
+                }
+                else if (card1.CompareTo(card2) == 1)
+                {
+                    Console.WriteLine("Player One wins this round. They get {0} points!", pot);
+                    player1 += pot;
+                    pot = 2;
+                }
+                else
+                {
+                    Console.WriteLine("Player Two wins this round. They get {0} points!", pot);
+                    player2 += pot;
+                    pot = 2;
+                }
+                Console.WriteLine("Current Score");
+                Console.WriteLine("Player1 = {0}", player1);
+                Console.WriteLine("Player2 = {0}", player2);
+                Console.Write("Press return to continue. . .");
+                Console.ReadLine();
+            }
+        }/*WarGame*/
+        
+        static void PokerGame()
+        {
+            /* Highest card, a pair, three of a kind,  a straight - ie 34567, a flush - all 5 cards from same suit, full house - a pair plus three of a kind, 4 of a kind, straight flush,royal flush - 10JQKAce */
+            /*to compare 2 full house hands - hand with highest 3 of a kind card wins */
+
+            /* create a deck */
+            Deck aDeck = new Deck();
+            /*shuffle the deck*/
+            aDeck.Shuffle();
+            Console.WriteLine(aDeck.Print());
+            Console.ReadKey();
+            /*deal out 2 hands*/
+            Hand playerOne = new Hand(aDeck);
+            Console.WriteLine(aDeck.Print());
+            Console.ReadKey();
+        }/*PokerGame*/
         static void Main(string[] args)
         {
             //Card card1;
@@ -221,6 +384,33 @@ namespace CardGame
                 Console.Write("Press return to continue. . .");
                 Console.ReadLine(); 
             }
+            ConsoleKeyInfo c;
+            bool done = false;
+            while (!done)
+            {
+                Console.WriteLine("Card Games");
+                Console.WriteLine("----------");
+                Console.WriteLine("W - War");
+                Console.WriteLine("P - Poker");
+                Console.WriteLine("Q - Quit");
+                c = Console.ReadKey();
+                switch (char.ToUpper(c.KeyChar))
+                {
+                    case 'W': WarGame();
+                        Console.WriteLine("Want to try a game of poker?");
+                        break;
+                    case 'P': PokerGame();
+                        Console.WriteLine("Want to run through a game of War now?");
+                        break;
+                    case 'Q': done = true;
+                        break;
+                    default:
+                        Console.WriteLine("Please enter a valid choice.");
+                        break;
+                }
+            }/*while*/          
+            
+            
             Console.WriteLine("Thank you for playing!");
             Console.ReadKey();
         }
