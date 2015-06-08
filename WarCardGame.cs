@@ -115,7 +115,7 @@ namespace CardGame
         public String Print()
         {
             String s = "";
-            for (int i = 0; i < CARDSINDECK; i++)
+            for (int i = cardIndex; i < CARDSINDECK; i++)
             {
                 s+= theDeck[i].ToString();
             }
