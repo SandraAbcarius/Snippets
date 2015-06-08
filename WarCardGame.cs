@@ -184,7 +184,7 @@ namespace CardGame
                 newn = 0; /*if no swaps happen we are sorted */
                 for (int i = 1; i < n; i++)
                 {
-                    if (theHand[i - 1].GetSuit() > theHand[i].GetSuit())
+                    if (theHand[i - 1].GetFaceValue() > theHand[i].GetFaceValue())
                     {
                         /* we swap the order since lower index card is greater */
                         /*should pass by reference? or is ok since in a list already?*/
