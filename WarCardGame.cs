@@ -174,6 +174,7 @@ namespace CardGame
 
         public void SortHand()
         {
+            /*Tested -works */	
             /*sort the hand based on FaceValue*/
             /*Since I am just sorting 5 items at a time a bubble sort is fine*/
             int newn;
@@ -187,8 +188,6 @@ namespace CardGame
                     if (theHand[i - 1].GetFaceValue() > theHand[i].GetFaceValue())
                     {
                         /* we swap the order since lower index card is greater */
-                        /*should pass by reference? or is ok since in a list already?*/
-                        /*pretty sure is ok but double check */
                         temp = theHand[i - 1];
                         theHand[i - 1]= theHand[i];
                         theHand[i] = temp;
